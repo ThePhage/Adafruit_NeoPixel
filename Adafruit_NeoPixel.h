@@ -16,9 +16,6 @@
   <http://www.gnu.org/licenses/>.
   --------------------------------------------------------------------*/
 
-#ifndef ADAFRUIT_NEOPIXEL_H
-#define ADAFRUIT_NEOPIXEL_H
-
 #if (ARDUINO >= 100)
  #include <Arduino.h>
 #else
@@ -45,35 +42,26 @@ class Adafruit_NeoPixel {
     begin(void),
     show(void),
     setPixelColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b),
-    setPixelColor(uint16_t n, uint32_t c),
-    setBrightness(uint8_t);
+    setPixelColor(uint16_t n, uint32_t c);
   uint16_t
     numPixels(void);
-  static uint32_t
-    Color(uint8_t r, uint8_t g, uint8_t b);
   uint32_t
+    Color(uint8_t r, uint8_t g, uint8_t b),
     getPixelColor(uint16_t n);
 
  private:
 
-  const uint16_t
+  uint16_t
     numLEDs,       // Number of RGB LEDs in strip
     numBytes;      // Size of 'pixels' buffer below
-  const uint8_t
-    pin,           // Output pin number
-    type;          // Pixel flags (400 vs 800 KHz, RGB vs GRB color)
   uint8_t
-    brightness,
-   *pixels;        // Holds LED color values (3 bytes each)
+   *pixels,        // Holds LED color values (3 bytes each)
+    pin,           // Output pin number
+    pinMask,       // Output PORT bitmask
+    type;          // Pixel flags (400 vs 800 KHz, RGB vs GRB color)
+  volatile uint8_t
+    *port;         // Output PORT register
   uint32_t
     endTime;       // Latch timing reference
-#ifdef __AVR__
-  const volatile uint8_t
-    *port;         // Output PORT register
-  const uint8_t
-    pinMask;       // Output PORT bitmask
-#endif
 
 };
-
-#endif // ADAFRUIT_NEOPIXEL_H
